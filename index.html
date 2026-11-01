@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOLE // SNEAKER STORE</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#84cc16',
+            dark: '#0a0a0a',
+            surface: '#121212',
+            borderDark: '#262626'
+          },
+          fontFamily: {
+            heading: ['Unbounded', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Unbounded:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .font-heading { font-family: 'Unbounded', sans-serif; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #262626; }
+    ::-webkit-scrollbar-thumb:hover { background: #84cc16; }
+
+    /* === Шум на фоне главного экрана === */
+    .noise-bg { position: relative; }
+    .noise-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+    .noise-bg > * { position: relative; z-index: 1; }
+
+    /* === Лайтбокс === */
+    #lightbox {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    #lightbox img {
+      display: block;
+      margin: 5% auto;
+      max-width: 90%;
+      max-height: 80vh;
+      object-fit: contain;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+    #lightbox .lb-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: #fff;
+      font-size: 2.5rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.2s;
+      z-index: 101;
+      user-select: none;
+    }
+    #lightbox .lb-close:hover { color: #84cc16; }
+
+    /* === Кнопка закрытия модалки (крестик) === */
+    #closeModal { display: flex !important; align-items: center; justify-content: center; position: absolute !important; top: 12px !important; right: 12px !important; z-index: 60 !important; width: 38px; height: 38px; background-color: #121212 !important; border: 1px solid #262626 !important; color: #a1a1aa !important; padding: 0 !important; } #closeModal:hover { color: #ffffff !important; border-color: #84cc16 !important; } #closeModal svg { width: 18px !important; height: 18px !important; }
+    #closeModal:hover {
+      color: #ffffff !important;
+      border-color: #84cc16 !important;
+      background-color: #1a1a1a !important;
+    }
+    #closeModal svg { width: 18px !important; height: 18px !important; }
+
+    /* Чтобы крестик не наезжал на текст в модалке */
+    #modalContainer .modal-body { padding-top: 3.5rem; }
+
+    /* Плавное появление модалки */
+    #productModal.opacity-0 #modalContainer { transform: scale(0.95); }
+  </style>
+</head>
+<body class="bg-dark text-white min-h-screen flex flex-col justify-between selection:bg-brand selection:text-black">
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-dark/80 backdrop-blur-md border-b border-borderDark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#" class="font-heading text-2xl font-black tracking-tighter text-white hover:text-brand transition-colors">
+        SOLE<span class="text-brand">//</span>
+      </a>
+      <nav class="hidden md:flex items-center space-x-8 text-sm uppercase tracking-widest font-medium">
+        <a href="#catalog" class="hover:text-brand transition-colors">Каталог</a>
+        <a href="#about" class="hover:text-brand transition-colors">О нас</a>
+        <a href="#contacts" class="hover:text-brand transition-colors">Контакты</a>
+      </nav>
+      <a href="#catalog" class="p-2 border border-borderDark hover:border-brand hover:text-brand transition-colors">
+        <i data-lucide="search" class="w-5 h-5"></i>
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow pt-20">
+
+    <!-- Hero -->
+    <section class="noise-bg min-h-[85vh] flex items-center border-b border-borderDark overflow-hidden px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto w-full py-16">
+        <div class="max-w-3xl">
+          <span class="inline-block px-3 py-1 bg-borderDark text-brand text-xs uppercase tracking-widest font-semibold mb-6 border border-borderDark">
+            NEW COLLECTION 2026
+          </span>
+          <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold uppercase leading-none tracking-tight mb-6">
+            ТВОЙ СЛЕДУЮЩИЙ <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-300 to-brand">ШАГ</span>
+          </h1>
+          <p class="text-neutral-400 text-lg sm:text-xl mb-10 max-w-xl leading-relaxed">
+            Эксклюзивная подборка премиальных силуэтов. Строгий минимализм, оригинальное качество и доставка прямо в руки.
+          </p>
+          <a href="#catalog" class="inline-flex items-center justify-center bg-brand text-black font-heading font-bold px-8 py-4 uppercase tracking-wider text-sm hover:bg-white transition-all transform hover:-translate-y-0.5">
+            Смотреть каталог
+            <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="hidden lg:block absolute right-12 bottom-12 border border-borderDark p-6 bg-surface/50 backdrop-blur-sm z-10">
+        <div class="text-xs text-neutral-500 font-mono uppercase mb-2">QUICK STATS</div>
+        <div class="text-2xl font-heading font-bold text-brand">100% ORIGINAL</div>
+        <div class="text-xs text-neutral-400">Гарантия подлинности каждой пары</div>
+      </div>
+    </section>
+
+    <!-- Catalog -->
+    <section id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+        <div>
+          <span class="text-brand font-mono text-xs tracking-widest uppercase">EXPLORE</span>
+          <h2 class="font-heading text-3xl sm:text-4xl font-extrabold uppercase tracking-tight mt-1">КАТАЛОГ КРОССОВОК</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
+          <div class="relative">
+            <input type="text" id="searchInput" placeholder="Поиск..." class="w-full bg-surface border border-borderDark px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-brand">
+            <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute right-3 top-3.5"></i>
+          </div>
+          <select id="categorySelect" class="bg-surface border border-borderDark px-4 py-3 text-sm text-white focus:outline-none focus:border-brand cursor-pointer">
+            <option value="all">Все категории</option>
+            <option value="Men">Мужские</option>
+            <option value="Women">Женские</option>
+            <option value="Unisex">Унисекс</option>
+          </select>
+          <select id="brandSelect" class="bg-surface border border-borderDark px-4 py-3 text-sm text-white focus:outline-none focus:border-brand cursor-pointer">
+            <option value="all">Все бренды</option>
+            <option value="Nike">Nike</option>
+            <option value="Adidas">Adidas</option>
+            <option value="Puma">Puma</option>
+            <option value="Balenciaga">Balenciaga</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+      <div id="noResults" class="hidden text-center py-20 border border-dashed border-borderDark my-6">
+        <i data-lucide="package-x" class="w-12 h-12 text-neutral-600 mx-auto mb-4"></i>
+        <h3 class="font-heading text-xl font-bold uppercase mb-2">Товары не найдены</h3>
+        <p class="text-neutral-500 text-sm">Попробуйте изменить параметры поиска или фильтры</p>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="border-t border-borderDark bg-surface py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="text-brand font-mono text-xs tracking-widest uppercase">// PHILOSOPHY</span>
+            <h2 class="font-heading text-3xl sm:text-4xl font-extrabold uppercase mt-2 mb-6">О НАШЕМ МАГАЗИНЕ</h2>
+            <p class="text-neutral-400 mb-4 leading-relaxed">
+              SOLE — это концептуальный каталог строго лимитированных и культовых силуэтов. Мы убрали весь визуальный шум, чтобы вы могли сосредоточиться на главном — дизайне, форме и культуре сникерхединга.
+            </p>
+            <p class="text-neutral-400 leading-relaxed mb-8">
+              Каждая пара проходит многоэтапную проверку на аутентичность. Мы работаем напрямую с проверенными поставщиками по всему миру.
+            </p>
+            <div class="grid grid-cols-2 gap-6 border-t border-borderDark pt-6">
+              <div>
+                <div class="font-heading text-2xl font-bold text-brand">100%</div>
+                <div class="text-xs text-neutral-500 uppercase mt-1">Оригинал</div>
+              </div>
+              <div>
+                <div class="font-heading text-2xl font-bold text-brand">24/7</div>
+                <div class="text-xs text-neutral-500 uppercase mt-1">Поддержка</div>
+              </div>
+            </div>
+          </div>
+          <div class="border border-borderDark bg-dark p-8 relative">
+            <div class="absolute -top-3 -left-3 bg-brand text-black text-xs font-mono px-2 py-1 uppercase font-bold">MANIFESTO</div>
+            <div class="font-mono text-sm text-neutral-300 space-y-4">
+              <p>01. ТАКТИЛЬНЫЙ МИНИМАЛИЗМ</p>
+              <p>02. БЕЗ КОМПРОМИССОВ В КАЧЕСТВЕ</p>
+              <p>03. ПРЯМАЯ СВЯЗЬ БЕЗ ПОСРЕДНИКОВ</p>
+              <p>04. СКОРОСТЬ И НАДЕЖНОСТЬ</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="contacts" class="border-t border-borderDark bg-dark py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div class="md:col-span-2">
+          <a href="#" class="font-heading text-2xl font-black tracking-tighter text-white hover:text-brand transition-colors block mb-4">
+            SOLE<span class="text-brand">//</span>
+          </a>
+          <p class="text-neutral-400 text-sm max-w-sm mb-6">
+            Ваш надежный проводник в мир лимитированной обуви и стритвер культуры.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-heading text-sm font-bold uppercase tracking-wider mb-4 text-white">Контакты</h4>
+          <ul class="space-y-2 text-sm text-neutral-400">
+            <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-brand"></i> +7 (999) 000-00-00</li>
+            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-brand"></i> info@sole-store.com</li>
+            <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-brand"></i> Москва, ул. Кузнецкий Мост, 12</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading text-sm font-bold uppercase tracking-wider mb-4 text-white">График работы</h4>
+          <p class="text-sm text-neutral-400">Пн — Вс: 10:00 — 22:00</p>
+          <p class="text-xs text-neutral-500 mt-2">Онлайн заказы принимаются круглосуточно.</p>
+        </div>
+      </div>
+      <div class="border-t border-borderDark pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-neutral-500 gap-4">
+        <div>&copy; 2026 SOLE STORE. ALL RIGHTS RESERVED.</div>
+        <div class="flex space-x-6">
+          <a href="#" class="hover:text-brand transition-colors">Telegram</a>
+          <a href="#" class="hover:text-brand transition-colors">WhatsApp</a>
+          <a href="#" class="hover:text-brand transition-colors">VKontakte</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Product Modal -->
+  <div id="productModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-300 flex">
+    <div id="modalContainer" class="bg-surface border border-borderDark max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl transition-transform duration-300 scale-95">
+      <button id="closeModal" aria-label="Закрыть">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="bg-dark p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-borderDark min-h-[250px] relative">
+          <img id="modalImage" src="" alt="Product" class="w-full h-full object-contain relative z-10 drop-shadow-2xl cursor-zoom-in" onclick="openLightbox(this.src)">
+        </div>
+
+        <div class="p-6 modal-body flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span id="modalBrand" class="text-xs font-mono uppercase text-neutral-400 tracking-widest">BRAND</span>
+              <span id="modalCategory" class="text-xs font-mono uppercase text-brand">CATEGORY</span>
+            </div>
+            <h3 id="modalTitle" class="font-heading text-xl font-bold uppercase mb-2">PRODUCT NAME</h3>
+            <div id="modalPrice" class="font-heading text-2xl font-black text-brand mb-4">0 ₽</div>
+            <p id="modalDescription" class="text-neutral-400 text-xs leading-relaxed mb-6"></p>
+
+            <div class="mb-6">
+              <label class="block text-xs font-mono uppercase text-neutral-400 mb-2">Выберите размер (EU):</label>
+              <div id="sizeList" class="grid grid-cols-4 gap-2"></div>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-4 border-t border-borderDark">
+            <a id="btnWhatsApp" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-heading text-xs font-bold py-3 uppercase tracking-wider transition-colors">
+              <i data-lucide="message-circle" class="w-4 h-4"></i> Заказать в WhatsApp
+            </a>
+            <a id="btnTelegram" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white font-heading text-xs font-bold py-3 uppercase tracking-wider transition-colors">
+              <i data-lucide="send" class="w-4 h-4"></i> Заказать в Telegram
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <span class="lb-close" onclick="closeLightbox(event)">&times;</span>
+    <img id="lightboxImg" src="" alt="Zoomed Image" onclick="event.stopPropagation()">
+  </div>
+
+  <script>
+    function openLightbox(src) {
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lightboxImg').src = src;
+      lb.style.display = 'block';
+    }
+    function closeLightbox(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('lightbox').style.display = 'none';
+    }
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') closeLightbox(e);
+    });
+
+    const products = [
+      { id: 1, name: "Air Jordan 1 Retro High OG", brand: "Nike", category: "Men", price: 24990, sizes: [40,41,42,43,44,45], description: "Легендарный силуэт в классическом исполнении. Премиальная кожа, амортизация Air-Sole и бескомпромиссный стиль." },
+      { id: 2, name: "Yeezy Boost 350 V2", brand: "Adidas", category: "Unisex", price: 31990, sizes: [38,39,40,41,42,43], description: "Инновационный верх Primeknit и подошва Boost гарантируют максимальный комфорт при повседневной носке." },
+      { id: 3, name: "Track Sneaker Black", brand: "Balenciaga", category: "Unisex", price: 89900, sizes: [39,40,41,42,43,44], description: "Многослойный футуристичный дизайн из высокотехнологичных материалов. Икона современной высокой моды." },
+      { id: 4, name: "Dunk Low Retro", brand: "Nike", category: "Women", price: 18990, sizes: [36,37,38,39,40], description: "Созданные для баскетбольной площадки, но завоевавшие улицы. Лаконичный двухцветный дизайн." },
+      { id: 5, name: "RS-X Efekt Dark", brand: "Puma", category: "Men", price: 14990, sizes: [41,42,43,44,45], description: "Массивный силуэт с экспрессивными линиями и угловатым дизайном в тёмных оттенках." },
+      { id: 6, name: "Forum Low Classic", brand: "Adidas", category: "Women", price: 15990, sizes: [36,37,38,39], description: "Ретро-стиль 84 года. Кожаный верх, фирменный ремешок на лодыжке и винтажная эстетика." },
+      { id: 7, name: "Air Max 97 Silver", brand: "Nike", category: "Men", price: 21990, sizes: [40,41,42,43,44], description: "Культовая модель с амортизацией Air и металлическим верхом. Серебристый блеск и футуристичный дизайн." },
+      { id: 8, name: "Samba OG Classic", brand: "Adidas", category: "Unisex", price: 12990, sizes: [38,39,40,41,42], description: "Вечная классика с терракотовыми полосками. Кожаный верх и замшевый носок для максимального комфорта." },
+      { id: 9, name: "Suede Classic XXI", brand: "Puma", category: "Women", price: 9990, sizes: [36,37,38,39,40], description: "Замшевый силуэт, который покорил улицы. Лаконичный дизайн в винтажном стиле." }
+    ];
+
+    let selectedProduct = null;
+    let selectedSize = null;
+
+    const $ = id => document.getElementById(id);
+    const productsGrid = $('productsGrid');
+    const searchInput = $('searchInput');
+    const categorySelect = $('categorySelect');
+    const brandSelect = $('brandSelect');
+    const noResults = $('noResults');
+    const modal = $('productModal');
+    const modalContainer = $('modalContainer');
+
+    function renderProducts(items) {
+      productsGrid.innerHTML = '';
+      if (items.length === 0) { noResults.classList.remove('hidden'); return; }
+      noResults.classList.add('hidden');
+
+      items.forEach(product => {
+        const card = document.createElement('div');
+        card.className = "bg-surface border border-borderDark hover:border-brand transition-all flex flex-col justify-between group";
+        card.innerHTML = `
+          <div>
+            <div class="bg-dark p-8 h-64 flex items-center justify-center border-b border-borderDark relative overflow-hidden">
+              <span class="absolute top-3 left-3 text-[10px] font-mono uppercase bg-borderDark px-2 py-0.5 text-neutral-300">${product.brand}</span>
+              <span class="absolute top-3 right-3 text-[10px] font-mono uppercase text-brand">${product.category}</span>
+              <img src="boots${product.id}.jpg" alt="${product.name}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 relative z-10 drop-shadow-2xl cursor-zoom-in" onclick="openLightbox(this.src)">
+            </div>
+            <div class="p-6">
+              <h3 class="font-heading text-sm font-bold uppercase tracking-tight mb-2 group-hover:text-brand transition-colors">${product.name}</h3>
+              <div class="font-heading text-base font-black text-brand mb-4">${product.price.toLocaleString('ru-RU')} ₽</div>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button onclick="openModal(${product.id})" class="w-full border border-borderDark hover:border-brand bg-dark hover:bg-brand text-white hover:text-black font-heading text-xs font-bold py-3 uppercase tracking-wider transition-all">
+              Узнать о товаре
+            </button>
+          </div>
+        `;
+        productsGrid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function filterProducts() {
+      const query = searchInput.value.toLowerCase().trim();
+      const category = categorySelect.value;
+      const brand = brandSelect.value;
+      const filtered = products.filter(p => {
+        const ms = p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query);
+        const mc = category === 'all' || p.category === category;
+        const mb = brand === 'all' || p.brand === brand;
+        return ms && mc && mb;
+      });
+      renderProducts(filtered);
+    }
+
+    function openModal(id) {
+      selectedProduct = products.find(p => p.id === id);
+      if (!selectedProduct) return;
+      selectedSize = selectedProduct.sizes[0];
+
+      $('modalTitle').textContent = selectedProduct.name;
+      $('modalBrand').textContent = selectedProduct.brand;
+      $('modalCategory').textContent = selectedProduct.category;
+      $('modalPrice').textContent = selectedProduct.price.toLocaleString('ru-RU') + ' ₽';
+      $('modalDescription').textContent = selectedProduct.description;
+      $('modalImage').src = 'boots' + selectedProduct.id + '.jpg';
+
+      renderSizes();
+      updateMessengerLinks();
+
+      modal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        modalContainer.classList.remove('scale-95');
+      });
+    }
+
+    function closeModal() {
+      modal.classList.add('opacity-0');
+      modalContainer.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    function renderSizes() {
+      const sizeList = $('sizeList');
+      sizeList.innerHTML = '';
+      selectedProduct.sizes.forEach(size => {
+        const btn = document.createElement('button');
+        const isSel = size === selectedSize;
+        btn.className = `py-2 text-xs font-mono border ${isSel ? 'border-brand text-brand bg-brand/10' : 'border-borderDark text-neutral-300 hover:border-neutral-500'} transition-colors`;
+        btn.textContent = size;
+        btn.onclick = () => { selectedSize = size; renderSizes(); updateMessengerLinks(); };
+        sizeList.appendChild(btn);
+      });
+    }
+
+    function updateMessengerLinks() {
+      if (!selectedProduct) return;
+      const msg = `Здравствуйте, меня интересует ${selectedProduct.name}, размер ${selectedSize}`;
+      const enc = encodeURIComponent(msg);
+      $('btnWhatsApp').href = `https://wa.me/79990000000?text=${enc}`;
+      $('btnTelegram').href = `https://t.me/share/url?url=&text=${enc}`;
+    }
+
+    searchInput.addEventListener('input', filterProducts);
+    categorySelect.addEventListener('change', filterProducts);
+    brandSelect.addEventListener('change', filterProducts);
+    $('closeModal').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts(products);
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
+
+
+
