@@ -121,7 +121,7 @@
       <nav class="hidden md:flex items-center space-x-8 text-sm uppercase tracking-widest font-medium">
         <a href="#catalog" class="hover:text-brand transition-colors">Каталог</a>
         <a href="#about" class="hover:text-brand transition-colors">О нас</a>
-        <a href="#contacts" class="hover:text-brand transition-colors">Контакты</a>
+        <a href="#contacts-section" class="hover:text-brand transition-colors">Контакты</a>
       </nav>
       <a href="#catalog" class="p-2 border border-borderDark hover:border-brand hover:text-brand transition-colors">
         <i data-lucide="search" class="w-5 h-5"></i>
@@ -172,19 +172,37 @@
             <input type="text" id="searchInput" placeholder="Поиск..." class="w-full bg-surface border border-borderDark px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-brand">
             <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute right-3 top-3.5"></i>
           </div>
-          <select id="categorySelect" class="bg-surface border border-borderDark px-4 py-3 text-sm text-white focus:outline-none focus:border-brand cursor-pointer">
-            <option value="all">Все категории</option>
-            <option value="Men">Мужские</option>
-            <option value="Women">Женские</option>
-            <option value="Unisex">Унисекс</option>
-          </select>
-          <select id="brandSelect" class="bg-surface border border-borderDark px-4 py-3 text-sm text-white focus:outline-none focus:border-brand cursor-pointer">
-            <option value="all">Все бренды</option>
-            <option value="Nike">Nike</option>
-            <option value="Adidas">Adidas</option>
-            <option value="Puma">Puma</option>
-            <option value="Balenciaga">Balenciaga</option>
-          </select>
+          
+<div class="relative w-full custom-select" id="customCategoryWrapper" data-target="categorySelect">
+    <button type="button" class="w-full bg-surface border border-borderDark px-4 py-3 text-sm text-white flex justify-between items-center focus:outline-none hover:border-brand transition-colors">
+        <span class="select-label">Все категории</span>
+        <i data-lucide="chevron-down" class="w-4 h-4 text-neutral-500"></i>
+    </button>
+    <ul class="select-menu absolute z-20 w-full mt-1 bg-surface border border-borderDark shadow-2xl hidden max-h-60 overflow-y-auto">
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="all">Все категории</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Men">Мужские</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Women">Женские</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Unisex">Унисекс</li>
+    </ul>
+    <input type="hidden" id="categorySelect" value="all">
+</div>
+
+          
+<div class="relative w-full custom-select" id="customBrandWrapper" data-target="brandSelect">
+    <button type="button" class="w-full bg-surface border border-borderDark px-4 py-3 text-sm text-white flex justify-between items-center focus:outline-none hover:border-brand transition-colors">
+        <span class="select-label">Все бренды</span>
+        <i data-lucide="chevron-down" class="w-4 h-4 text-neutral-500"></i>
+    </button>
+    <ul class="select-menu absolute z-20 w-full mt-1 bg-surface border border-borderDark shadow-2xl hidden max-h-60 overflow-y-auto">
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="all">Все бренды</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Nike">Nike</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Adidas">Adidas</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Puma">Puma</li>
+        <li class="px-4 py-2 text-sm text-white hover:bg-brand hover:text-black cursor-pointer transition-colors" data-value="Balenciaga">Balenciaga</li>
+    </ul>
+    <input type="hidden" id="brandSelect" value="all">
+</div>
+
         </div>
       </div>
 
@@ -221,22 +239,89 @@
               </div>
             </div>
           </div>
-          <div class="border border-borderDark bg-dark p-8 relative">
+          
+          <div class="border border-borderDark bg-dark p-8 relative flex flex-col justify-center">
             <div class="absolute -top-3 -left-3 bg-brand text-black text-xs font-mono px-2 py-1 uppercase font-bold">MANIFESTO</div>
-            <div class="font-mono text-sm text-neutral-300 space-y-4">
-              <p>01. ТАКТИЛЬНЫЙ МИНИМАЛИЗМ</p>
-              <p>02. БЕЗ КОМПРОМИССОВ В КАЧЕСТВЕ</p>
-              <p>03. ПРЯМАЯ СВЯЗЬ БЕЗ ПОСРЕДНИКОВ</p>
-              <p>04. СКОРОСТЬ И НАДЕЖНОСТЬ</p>
+            
+            <div class="space-y-4 font-mono text-sm mt-2">
+              <!-- Пункт 01 -->
+              <div class="flex items-center gap-4 group">
+                <span class="text-brand text-xs border border-brand/30 px-2 py-0.5 bg-brand/5 group-hover:bg-brand group-hover:text-black transition-colors">01</span>
+                <span class="text-neutral-300 group-hover:text-white transition-colors">ТАКТИЛЬНЫЙ МИНИМАЛИЗМ</span>
+              </div>
+              <!-- Пункт 02 -->
+              <div class="flex items-center gap-4 group">
+                <span class="text-brand text-xs border border-brand/30 px-2 py-0.5 bg-brand/5 group-hover:bg-brand group-hover:text-black transition-colors">02</span>
+                <span class="text-neutral-300 group-hover:text-white transition-colors">БЕЗ КОМПРОМИССОВ В КАЧЕСТВЕ</span>
+              </div>
+              <!-- Пункт 03 -->
+              <div class="flex items-center gap-4 group">
+                <span class="text-brand text-xs border border-brand/30 px-2 py-0.5 bg-brand/5 group-hover:bg-brand group-hover:text-black transition-colors">03</span>
+                <span class="text-neutral-300 group-hover:text-white transition-colors">ПРЯМАЯ СВЯЗЬ БЕЗ ПОСРЕДНИКОВ</span>
+              </div>
+              <!-- Пункт 04 -->
+              <div class="flex items-center gap-4 group">
+                <span class="text-brand text-xs border border-brand/30 px-2 py-0.5 bg-brand/5 group-hover:bg-brand group-hover:text-black transition-colors">04</span>
+                <span class="text-neutral-300 group-hover:text-white transition-colors">СКОРОСТЬ И НАДЕЖНОСТЬ</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  
+    <!-- Contacts Section -->
+    <section id="contacts-section" class="border-t border-borderDark bg-dark py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+          <span class="text-brand font-mono text-xs tracking-widest uppercase">// КОНТАКТЫ</span>
+          <h2 class="font-heading text-3xl sm:text-4xl font-extrabold uppercase mt-1">СВЯЗАТЬСЯ С НАМИ</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Телефон -->
+          <a href="tel:+79990000000" class="bg-surface border border-borderDark p-6 flex flex-col items-start hover:border-brand transition-colors group">
+            <div class="w-10 h-10 bg-dark border border-borderDark flex items-center justify-center text-brand mb-4 group-hover:bg-brand group-hover:text-black transition-colors">
+              <i data-lucide="phone" class="w-5 h-5"></i>
+            </div>
+            <div class="text-xs font-mono uppercase text-neutral-500 mb-1">Позвонить</div>
+            <div class="font-heading text-lg font-bold text-white">+7 (999) 000-00-00</div>
+            <div class="text-sm text-neutral-400 mt-2">Пн — Вс: 10:00 — 22:00</div>
+          </a>
+
+          <!-- Email -->
+          <a href="mailto:info@sole-store.com" class="bg-surface border border-borderDark p-6 flex flex-col items-start hover:border-brand transition-colors group">
+            <div class="w-10 h-10 bg-dark border border-borderDark flex items-center justify-center text-brand mb-4 group-hover:bg-brand group-hover:text-black transition-colors">
+              <i data-lucide="mail" class="w-5 h-5"></i>
+            </div>
+            <div class="text-xs font-mono uppercase text-neutral-500 mb-1">Написать</div>
+            <div class="font-heading text-lg font-bold text-white">info@sole-store.com</div>
+            <div class="text-sm text-neutral-400 mt-2">Ответим в течение часа</div>
+          </a>
+
+          <!-- Адрес / Мессенджеры -->
+          <div class="bg-surface border border-borderDark p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 bg-dark border border-borderDark flex items-center justify-center text-brand mb-4">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div class="text-xs font-mono uppercase text-neutral-500 mb-1">Приехать</div>
+              <div class="font-heading text-sm font-bold text-white mb-1">Москва, ул. Кузнецкий Мост, 12</div>
+            </div>
+            <div class="flex gap-3 mt-6">
+              <a href="https://wa.me/79990000000" target="_blank" class="flex-1 py-2 text-center border border-borderDark hover:border-brand hover:text-brand text-sm font-mono transition-colors">WhatsApp</a>
+              <a href="https://t.me/sole" target="_blank" class="flex-1 py-2 text-center border border-borderDark hover:border-brand hover:text-brand text-sm font-mono transition-colors">Telegram</a>
             </div>
           </div>
         </div>
       </div>
     </section>
+
   </main>
 
   <!-- Footer -->
-  <footer id="contacts" class="border-t border-borderDark bg-dark py-12">
+  <footer id="footer-contacts" class="border-t border-borderDark bg-dark py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
         <div class="md:col-span-2">
@@ -460,6 +545,46 @@
       renderProducts(products);
       lucide.createIcons();
     });
+  
+    // === КАСТОМНЫЕ СЕЛЕКТЫ ===
+    document.addEventListener('DOMContentLoaded', () => {
+      const customSelects = document.querySelectorAll('.custom-select');
+
+      customSelects.forEach(wrapper => {
+        const button = wrapper.querySelector('button');
+        const label = wrapper.querySelector('.select-label');
+        const menu = wrapper.querySelector('.select-menu');
+        const input = wrapper.querySelector('input[type="hidden"]');
+        const items = wrapper.querySelectorAll('li');
+
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          document.querySelectorAll('.select-menu').forEach(m => {
+            if (m !== menu) m.classList.add('hidden');
+          });
+          menu.classList.toggle('hidden');
+        });
+
+        items.forEach(item => {
+          item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const value = item.dataset.value;
+            const text = item.textContent;
+            input.value = value;
+            label.textContent = text;
+            menu.classList.add('hidden');
+            if (typeof filterProducts === 'function') {
+              filterProducts();
+            }
+          });
+        });
+      });
+
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.select-menu').forEach(m => m.classList.add('hidden'));
+      });
+    });
+
   </script>
 </body>
 </html>
